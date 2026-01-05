@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品系列 - 滇草源</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-green: #2D5016;
+            --warm-beige: #F5F1E8;
+            --amber: #D4A574;
+            --ivory: #FFFEF7;
+            --dark-brown: #8B4513;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--ivory);
+            color: var(--dark-brown);
+            padding-bottom: 80px;
+        }
+        
+        .serif-font {
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        .card-shadow {
+            box-shadow: 0 8px 32px rgba(45, 80, 22, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--deep-green), #3D6B1F);
+            color: var(--ivory);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--amber);
+            color: var(--dark-brown);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--warm-beige);
+            background: white;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .filter-btn.active {
+            border-color: var(--deep-green);
+            background: var(--deep-green);
+            color: white;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--amber);
+        }
+        
+        .product-card.selected {
+            border-color: var(--deep-green);
+            box-shadow: 0 8px 32px rgba(45, 80, 22, 0.2);
+        }
+        
+        .compare-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--deep-green);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .floating-compare {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--deep-green);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-compare:hover {
+            transform: translateX(-50%) translateY(-2px);
+        }
+        
+        .nav-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 254, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(45, 80, 22, 0.1);
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: var(--dark-brown);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .nav-item.active {
+            color: var(--deep-green);
+        }
+        
+        .nav-item:hover {
+            color: var(--deep-green);
+            transform: translateY(-2px);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .price-range {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--warm-beige);
+            outline: none;
+        }
+        
+        .price-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--deep-green);
+            cursor: pointer;
+        }
+        
+        .price-range::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--deep-green);
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="serif-font text-xl font-bold text-gray-800">产品系列</h1>
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleFilter()" class="text-gray-600 text-sm">
+                        <span class="mr-1">🔍</span>
+                        筛选
+                    </button>
+                    <button onclick="toggleSort()" class="text-gray-600 text-sm">
+                        <span class="mr-1">📊</span>
+                        排序
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Filter Bar -->
+    <section class="bg-white border-b px-4 py-3" id="filter-bar">
+        <div class="container mx-auto">
+            <div class="flex items-center space-x-2 overflow-x-auto pb-2">
+                <button class="filter-btn active" onclick="filterProducts('all')">全部</button>
+                <button class="filter-btn" onclick="filterProducts('anti-dandruff')">去屑</button>
+                <button class="filter-btn" onclick="filterProducts('nourishing')">滋养</button>
+                <button class="filter-btn" onclick="filterProducts('repair')">修复</button>
+                <button class="filter-btn" onclick="filterProducts('oil-control')">控油</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Products Grid -->
+    <section class="py-6 px-4">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card card-shadow relative" data-category="anti-dandruff" data-price="168">
+                    <div class="relative">
+                        <img src="hero-product.png" alt="滇草源特效去屑洗发水" class="w-full h-48 object-cover">
+                        <button class="absolute top-2 left-2 w-8 h-8 bg-white bg-opacity-80 rounded-full flex items-center justify-center text-sm" onclick="toggleCompare('product1')">
+                            <span id="compare-icon-product1">+</span>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="serif-font text-lg font-bold text-gray-800 mb-2">特效去屑洗发水</h3>
+                        <p class="text-gray-600 text-sm mb-3">蕴含云南普洱茶提取物，深层清洁头皮，有效去除头屑，改善头皮环境</p>
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-amber-400 text-sm mr-2">
+                                ★★★★★
+                            </div>
+                            <span class="text-xs text-gray-500">(128条评价)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-amber-600">¥168</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">¥198</span>
+                            </div>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm" onclick="addToCart('product1')">
+                                加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card card-shadow relative" data-category="nourishing repair" data-price="198">
+                    <div class="relative">
+                        <img src="product-lifestyle.png" alt="滇草源滋养修复洗发水" class="w-full h-48 object-cover">
+                        <button class="absolute top-2 left-2 w-8 h-8 bg-white bg-opacity-80 rounded-full flex items-center justify-center text-sm" onclick="toggleCompare('product2')">
+                            <span id="compare-icon-product2">+</span>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="serif-font text-lg font-bold text-gray-800 mb-2">滋养修复洗发水</h3>
+                        <p class="text-gray-600 text-sm mb-3">滇红玫瑰精油配方，深层滋养，修复受损发质，让秀发重现光泽</p>
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-amber-400 text-sm mr-2">
+                                ★★★★★
+                            </div>
+                            <span class="text-xs text-gray-500">(96条评价)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-amber-600">¥198</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">¥238</span>
+                            </div>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm" onclick="addToCart('product2')">
+                                加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card card-shadow relative" data-category="oil-control" data-price="188">
+                    <div class="relative">
+                        <img src="product-line.png" alt="滇草源控油平衡洗发水" class="w-full h-48 object-cover">
+                        <button class="absolute top-2 left-2 w-8 h-8 bg-white bg-opacity-80 rounded-full flex items-center justify-center text-sm" onclick="toggleCompare('product3')">
+                            <span id="compare-icon-product3">+</span>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="serif-font text-lg font-bold text-gray-800 mb-2">控油平衡洗发水</h3>
+                        <p class="text-gray-600 text-sm mb-3">高原薰衣草精华，调节油脂分泌，保持头皮清爽，持久控油</p>
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-amber-400 text-sm mr-2">
+                                ★★★★☆
+                            </div>
+                            <span class="text-xs text-gray-500">(85条评价)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-amber-600">¥188</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">¥218</span>
+                            </div>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm" onclick="addToCart('product3')">
+                                加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card card-shadow relative" data-category="nourishing" data-price="228">
+                    <div class="relative">
+                        <img src="herbs-closeup.png" alt="滇草源强韧生发洗发水" class="w-full h-48 object-cover">
+                        <button class="absolute top-2 left-2 w-8 h-8 bg-white bg-opacity-80 rounded-full flex items-center justify-center text-sm" onclick="toggleCompare('product4')">
+                            <span id="compare-icon-product4">+</span>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="serif-font text-lg font-bold text-gray-800 mb-2">强韧生发洗发水</h3>
+                        <p class="text-gray-600 text-sm mb-3">野生何首乌精华，强韧发根，促进头发生长，改善脱发问题</p>
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-amber-400 text-sm mr-2">
+                                ★★★★★
+                            </div>
+                            <span class="text-xs text-gray-500">(156条评价)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-amber-600">¥228</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">¥268</span>
+                            </div>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm" onclick="addToCart('product4')">
+                                加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 5 -->
+                <div class="product-card card-shadow relative" data-category="repair" data-price="258">
+                    <div class="relative">
+                        <img src="hero-product.png" alt="滇草源密集修护发膜" class="w-full h-48 object-cover">
+                        <button class="absolute top-2 left-2 w-8 h-8 bg-white bg-opacity-80 rounded-full flex items-center justify-center text-sm" onclick="toggleCompare('product5')">
+                            <span id="compare-icon-product5">+</span>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="serif-font text-lg font-bold text-gray-800 mb-2">密集修护发膜</h3>
+                        <p class="text-gray-600 text-sm mb-3">多重草本精华配方，深层修复受损发质，让秀发重现健康光泽</p>
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-amber-400 text-sm mr-2">
+                                ★★★★★
+                            </div>
+                            <span class="text-xs text-gray-500">(203条评价)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-amber-600">¥258</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">¥298</span>
+                            </div>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm" onclick="addToCart('product5')">
+                                加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 6 -->
+                <div class="product-card card-shadow relative" data-category="anti-dandruff oil-control" data-price="178">
+                    <div class="relative">
+                        <img src="product-lifestyle.png" alt="滇草源清爽控油洗发水" class="w-full h-48 object-cover">
+                        <button class="absolute top-2 left-2 w-8 h-8 bg-white bg-opacity-80 rounded-full flex items-center justify-center text-sm" onclick="toggleCompare('product6')">
+                            <span id="compare-icon-product6">+</span>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="serif-font text-lg font-bold text-gray-800 mb-2">清爽控油洗发水</h3>
+                        <p class="text-gray-600 text-sm mb-3">茶树精油配方，深层清洁，有效控制油脂分泌，持久清爽</p>
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-amber-400 text-sm mr-2">
+                                ★★★★☆
+                            </div>
+                            <span class="text-xs text-gray-500">(74条评价)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-amber-600">¥178</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">¥208</span>
+                            </div>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm" onclick="addToCart('product6')">
+                                加入购物车
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Floating Compare Button -->
+    <div class="floating-compare" id="compare-btn" onclick="showCompareModal()" style="display: none;">
+        对比产品 (<span id="compare-count">0</span>)
+    </div>
+    
+    <!-- Compare Modal -->
+    <div class="modal" id="compare-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="serif-font text-xl font-bold">产品对比</h3>
+                    <button onclick="closeCompareModal()" class="text-gray-500 text-2xl">&times;</button>
+                </div>
+                <div id="compare-content">
+                    <!-- 对比内容将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filter Modal -->
+    <div class="modal" id="filter-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="serif-font text-xl font-bold">筛选产品</h3>
+                    <button onclick="closeFilterModal()" class="text-gray-500 text-2xl">&times;</button>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-medium mb-3">功效分类</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="filter-btn active" onclick="toggleFilterOption(this, 'all')">全部</button>
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'anti-dandruff')">去屑</button>
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'nourishing')">滋养</button>
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'repair')">修复</button>
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'oil-control')">控油</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-3">价格区间</h4>
+                        <div class="px-2">
+                            <input type="range" min="100" max="300" value="300" class="price-range" id="price-range" oninput="updatePriceFilter(this.value)">
+                            <div class="flex justify-between text-sm text-gray-600 mt-2">
+                                <span>¥100</span>
+                                <span id="price-value">¥300</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-3">主要成分</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'tea')">普洱茶</button>
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'rose')">滇红玫瑰</button>
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'lavender')">薰衣草</button>
+                            <button class="filter-btn" onclick="toggleFilterOption(this, 'heshouwu')">何首乌</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-3 mt-8">
+                    <button class="flex-1 btn-secondary py-3 rounded-lg font-medium" onclick="resetFilter()">
+                        重置
+                    </button>
+                    <button class="flex-1 btn-primary py-3 rounded-lg font-medium" onclick="applyFilter()">
+                        应用筛选
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sort Modal -->
+    <div class="modal" id="sort-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="serif-font text-xl font-bold">排序方式</h3>
+                    <button onclick="closeSortModal()" class="text-gray-500 text-2xl">&times;</button>
+                </div>
+                
+                <div class="space-y-3">
+                    <button class="w-full text-left p-3 rounded-lg border-2 border-transparent hover:border-amber-400 transition-all" onclick="sortProducts('default')">
+                        <div class="font-medium">默认排序</div>
+                        <div class="text-sm text-gray-600">按推荐程度排序</div>
+                    </button>
+                    <button class="w-full text-left p-3 rounded-lg border-2 border-transparent hover:border-amber-400 transition-all" onclick="sortProducts('price-low')">
+                        <div class="font-medium">价格从低到高</div>
+                        <div class="text-sm text-gray-600">按价格升序排列</div>
+                    </button>
+                    <button class="w-full text-left p-3 rounded-lg border-2 border-transparent hover:border-amber-400 transition-all" onclick="sortProducts('price-high')">
+                        <div class="font-medium">价格从高到低</div>
+                        <div class="text-sm text-gray-600">按价格降序排列</div>
+                    </button>
+                    <button class="w-full text-left p-3 rounded-lg border-2 border-transparent hover:border-amber-400 transition-all" onclick="sortProducts('rating')">
+                        <div class="font-medium">评分排序</div>
+                        <div class="text-sm text-gray-600">按用户评价排序</div>
+                    </button>
+                    <button class="w-full text-left p-3 rounded-lg border-2 border-transparent hover:border-amber-400 transition-all" onclick="sortProducts('popular')">
+                        <div class="font-medium">热门排序</div>
+                        <div class="text-sm text-gray-600">按销量排序</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <nav class="nav-bottom">
+        <div class="flex justify-around">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>首页</span>
+            </a>
+            <a href="products.html" class="nav-item active">
+                <span class="nav-icon">🛍️</span>
+                <span>产品</span>
+            </a>
+            <a href="about.html" class="nav-item">
+                <span class="nav-icon">📖</span>
+                <span>关于</span>
+            </a>
+            <a href="contact.html" class="nav-item">
+                <span class="nav-icon">📞</span>
+                <span>联系</span>
+            </a>
+        </div>
+    </nav>
+    
+    <script>
+        // 产品数据
+        const allProducts = [
+            {
+                id: 'product1',
+                name: '特效去屑洗发水',
+                price: 168,
+                originalPrice: 198,
+                category: 'anti-dandruff',
+                rating: 5,
+                reviews: 128,
+                image: 'hero-product.png',
+                description: '蕴含云南普洱茶提取物，深层清洁头皮，有效去除头屑，改善头皮环境',
+                ingredients: ['tea', 'lavender']
+            },
+            {
+                id: 'product2',
+                name: '滋养修复洗发水',
+                price: 198,
+                originalPrice: 238,
+                category: 'nourishing repair',
+                rating: 5,
+                reviews: 96,
+                image: 'product-lifestyle.png',
+                description: '滇红玫瑰精油配方，深层滋养，修复受损发质，让秀发重现光泽',
+                ingredients: ['rose', 'heshouwu']
+            },
+            {
+                id: 'product3',
+                name: '控油平衡洗发水',
+                price: 188,
+                originalPrice: 218,
+                category: 'oil-control',
+                rating: 4,
+                reviews: 85,
+                image: 'product-line.png',
+                description: '高原薰衣草精华，调节油脂分泌，保持头皮清爽，持久控油',
+                ingredients: ['lavender', 'tea']
+            },
+            {
+                id: 'product4',
+                name: '强韧生发洗发水',
+                price: 228,
+                originalPrice: 268,
+                category: 'nourishing',
+                rating: 5,
+                reviews: 156,
+                image: 'herbs-closeup.png',
+                description: '野生何首乌精华，强韧发根，促进头发生长，改善脱发问题',
+                ingredients: ['heshouwu', 'rose']
+            },
+            {
+                id: 'product5',
+                name: '密集修护发膜',
+                price: 258,
+                originalPrice: 298,
+                category: 'repair',
+                rating: 5,
+                reviews: 203,
+                image: 'hero-product.png',
+                description: '多重草本精华配方，深层修复受损发质，让秀发重现健康光泽',
+                ingredients: ['rose', 'lavender', 'heshouwu']
+            },
+            {
+                id: 'product6',
+                name: '清爽控油洗发水',
+                price: 178,
+                originalPrice: 208,
+                category: 'anti-dandruff oil-control',
+                rating: 4,
+                reviews: 74,
+                image: 'product-lifestyle.png',
+                description: '茶树精油配方，深层清洁，有效控制油脂分泌，持久清爽',
+                ingredients: ['tea', 'lavender']
+            }
+        ];
+        
+        // 全局变量
+        let compareList = [];
+        let currentFilter = 'all';
+        let currentSort = 'default';
+        let cart = JSON.parse(localStorage.getItem('dianchaoyuan_cart') || '[]');
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeScrollAnimations();
+            updateCartUI();
+        });
+        
+        // 初始化滚动动画
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        // 筛选功能
+        function filterProducts(category) {
+            currentFilter = category;
+            
+            // 更新筛选按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 筛选产品
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const productCategory = product.dataset.category;
+                if (category === 'all' || productCategory.includes(category)) {
+                    product.style.display = 'block';
+                    anime({
+                        targets: product,
+                        opacity: [0, 1],
+                        translateY: [20, 0],
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+        
+        // 排序功能
+        function sortProducts(sortType) {
+            currentSort = sortType;
+            closeSortModal();
+            
+            const productsGrid = document.getElementById('products-grid');
+            const products = Array.from(productsGrid.children);
+            
+            products.sort((a, b) => {
+                switch(sortType) {
+                    case 'price-low':
+                        return parseInt(a.dataset.price) - parseInt(b.dataset.price);
+                    case 'price-high':
+                        return parseInt(b.dataset.price) - parseInt(a.dataset.price);
+                    case 'rating':
+                        return parseInt(b.dataset.rating) - parseInt(a.dataset.rating);
+                    case 'popular':
+                        return parseInt(b.dataset.reviews) - parseInt(a.dataset.reviews);
+                    default:
+                        return 0;
+                }
+            });
+            
+            // 重新排列DOM
+            products.forEach(product => {
+                productsGrid.appendChild(product);
+            });
+            
+            // 添加动画
+            anime({
+                targets: '.product-card',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 400,
+                delay: anime.stagger(100),
+                easing: 'easeOutQuad'
+            });
+        }
+        
+        // 对比功能
+        function toggleCompare(productId) {
+            const index = compareList.indexOf(productId);
+            const icon = document.getElementById(`compare-icon-${productId}`);
+            const card = document.querySelector(`[data-category]`).closest('.product-card');
+            
+            if (index > -1) {
+                // 移除对比
+                compareList.splice(index, 1);
+                icon.textContent = '+';
+                card.classList.remove('selected');
+            } else {
+                // 添加对比
+                if (compareList.length >= 3) {
+                    showNotification('最多只能对比3个产品');
+                    return;
+                }
+                compareList.push(productId);
+                icon.textContent = '✓';
+                card.classList.add('selected');
+            }
+            
+            updateCompareButton();
+        }
+        
+        function updateCompareButton() {
+            const btn = document.getElementById('compare-btn');
+            const count = document.getElementById('compare-count');
+            
+            if (compareList.length > 0) {
+                btn.style.display = 'block';
+                count.textContent = compareList.length;
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+        
+        function showCompareModal() {
+            if (compareList.length < 2) {
+                showNotification('至少选择2个产品进行对比');
+                return;
+            }
+            
+            const modal = document.getElementById('compare-modal');
+            const content = document.getElementById('compare-content');
+            
+            // 生成对比内容
+            let html = '<div class="overflow-x-auto"><table class="w-full text-sm">';
+            html += '<thead><tr><th class="text-left p-2">产品</th>';
+            
+            compareList.forEach(productId => {
+                const product = allProducts.find(p => p.id === productId);
+                html += `<th class="text-center p-2">${product.name}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            
+            // 对比项目
+            const compareItems = [
+                { key: 'price', label: '价格', format: (val) => `¥${val}` },
+                { key: 'rating', label: '评分', format: (val) => '★'.repeat(val) },
+                { key: 'reviews', label: '评价数', format: (val) => `${val}条` },
+                { key: 'category', label: '功效', format: (val) => val.split(' ').map(c => getCategoryName(c)).join('、') }
+            ];
+            
+            compareItems.forEach(item => {
+                html += `<tr class="border-t"><td class="p-2 font-medium">${item.label}</td>`;
+                compareList.forEach(productId => {
+                    const product = allProducts.find(p => p.id === productId);
+                    html += `<td class="text-center p-2">${item.format(product[item.key])}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table></div>';
+            
+            content.innerHTML = html;
+            modal.style.display = 'flex';
+            
+            anime({
+                targets: modal.querySelector('.modal-content'),
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+        }
+        
+        function closeCompareModal() {
+            const modal = document.getElementById('compare-modal');
+            anime({
+                targets: modal.querySelector('.modal-content'),
+                scale: [1, 0.8],
+                opacity: [1, 0],
+                duration: 300,
+                easing: 'easeInQuad',
+                complete: () => {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        function getCategoryName(category) {
+            const names = {
+                'anti-dandruff': '去屑',
+                'nourishing': '滋养',
+                'repair': '修复',
+                'oil-control': '控油'
+            };
+            return names[category] || category;
+        }
+        
+        // 模态框控制
+        function toggleFilter() {
+            document.getElementById('filter-modal').style.display = 'flex';
+        }
+        
+        function closeFilterModal() {
+            document.getElementById('filter-modal').style.display = 'none';
+        }
+        
+        function toggleSort() {
+            document.getElementById('sort-modal').style.display = 'flex';
+        }
+        
+        function closeSortModal() {
+            document.getElementById('sort-modal').style.display = 'none';
+        }
+        
+        // 筛选选项
+        function toggleFilterOption(btn, value) {
+            btn.classList.toggle('active');
+        }
+        
+        function updatePriceFilter(value) {
+            document.getElementById('price-value').textContent = `¥${value}`;
+        }
+        
+        function resetFilter() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.filter-btn').classList.add('active');
+            document.getElementById('price-range').value = 300;
+            document.getElementById('price-value').textContent = '¥300';
+        }
+        
+        function applyFilter() {
+            closeFilterModal();
+            showNotification('筛选条件已应用');
+        }
+        
+        // 购物车功能
+        function addToCart(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            updateCartUI();
+            saveCartToStorage();
+            showNotification('已添加到购物车');
+        }
+        
+        function updateCartUI() {
+            // 这里可以添加购物车UI更新逻辑
+        }
+        
+        function saveCartToStorage() {
+            localStorage.setItem('dianchaoyuan_cart', JSON.stringify(cart));
+        }
+        
+        // 通知功能
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            anime({
+                targets: notification,
+                translateY: [-50, 0],
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+            
+            setTimeout(() => {
+                anime({
+                    targets: notification,
+                    translateY: [0, -50],
+                    opacity: [1, 0],
+                    duration: 300,
+                    easing: 'easeInQuad',
+                    complete: () => {
+                        document.body.removeChild(notification);
+                    }
+                });
+            }, 3000);
+        }
+        
+        // 点击模态框外部关闭
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品牌故事 - 滇草源</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-green: #2D5016;
+            --warm-beige: #F5F1E8;
+            --amber: #D4A574;
+            --ivory: #FFFEF7;
+            --dark-brown: #8B4513;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--ivory);
+            color: var(--dark-brown);
+            padding-bottom: 80px;
+        }
+        
+        .serif-font {
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--warm-beige) 0%, #E8E0D0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .organic-shape {
+            position: absolute;
+            border-radius: 50% 40% 60% 30%;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .organic-shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: var(--deep-green);
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+        
+        .organic-shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            background: var(--amber);
+            bottom: -50px;
+            left: -50px;
+            animation-delay: 3s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+        
+        .card-shadow {
+            box-shadow: 0 8px 32px rgba(45, 80, 22, 0.1);
+        }
+        
+        .story-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--deep-green), var(--amber));
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--amber);
+            border-radius: 50%;
+            border: 3px solid var(--ivory);
+            box-shadow: 0 0 0 3px var(--deep-green);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background: var(--warm-beige);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .ingredient-showcase {
+            background: var(--warm-beige);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .ingredient-showcase:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(45, 80, 22, 0.15);
+        }
+        
+        .ingredient-showcase.active {
+            background: var(--deep-green);
+            color: var(--ivory);
+        }
+        
+        .process-step {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .process-step:hover {
+            border-color: var(--amber);
+            transform: translateY(-5px);
+        }
+        
+        .process-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--deep-green), #3D6B1F);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .nav-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 254, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(45, 80, 22, 0.1);
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: var(--dark-brown);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .nav-item.active {
+            color: var(--deep-green);
+        }
+        
+        .nav-item:hover {
+            color: var(--deep-green);
+            transform: translateY(-2px);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .parallax-bg {
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .quote-mark {
+            font-size: 4rem;
+            color: var(--amber);
+            opacity: 0.3;
+            line-height: 1;
+        }
+        
+        .certification-badge {
+            background: var(--amber);
+            color: var(--dark-brown);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-block;
+            margin: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section py-16 px-4 relative">
+        <div class="organic-shape"></div>
+        <div class="organic-shape"></div>
+        
+        <div class="container mx-auto relative z-10">
+            <div class="text-center mb-12">
+                <h1 class="serif-font text-4xl md:text-5xl font-bold text-gray-800 mb-6 opacity-0" id="hero-title">
+                    滇草源的故事
+                </h1>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto opacity-0" id="hero-subtitle">
+                    传承云南草本智慧，融合现代科技工艺，为每一位追求品质生活的您，打造纯净天然的护发体验
+                </p>
+            </div>
+            
+            <div class="relative max-w-md mx-auto opacity-0" id="hero-image">
+                <img src="herbs-closeup.png" alt="云南草本" class="w-full h-64 object-cover rounded-2xl card-shadow">
+            </div>
+        </div>
+    </section>
+    
+    <!-- Brand Story -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="story-card card-shadow fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">品牌起源</h2>
+                    <div class="w-16 h-1 bg-gradient-to-r from-green-600 to-amber-500 mx-auto"></div>
+                </div>
+                
+                <div class="space-y-6 text-gray-700 leading-relaxed">
+                    <p>
+                        滇草源诞生于云南这片神奇的土地，这里拥有世界上最丰富的生物多样性，孕育着无数珍贵的草本植物。我们的创始人李雅琳女士，是一位土生土长的云南人，从小就深受传统草本文化的熏陶。
+                    </p>
+                    
+                    <p>
+                        李雅琳女士的外祖母是当地有名的草医，擅长运用各种草本植物精华调理身体。从小，她就跟随外祖母认识各种草药，学习传统的提取工艺。在外祖母的教导下，她深刻理解了"天人合一，草本养人"的古老智慧。
+                    </p>
+                    
+                    <p>
+                        大学毕业后，李雅琳女士选择了化妆品研发专业，她希望能够将云南丰富的草本资源与现代科技相结合，创造出真正天然、有效的产品。经过多年的研究和实践，她终于找到了将传统草本智慧与现代护发科技完美融合的方法。
+                    </p>
+                </div>
+                
+                <div class="mt-8 p-6 bg-amber-50 rounded-xl">
+                    <div class="quote-mark">"</div>
+                    <p class="text-lg text-gray-700 italic leading-relaxed -mt-8">
+                        每一株草本都有它的故事，每一种配方都承载着我们的初心。我们希望将云南大自然的馈赠，传递给每一个追求美好生活的人。
+                    </p>
+                    <p class="text-right text-gray-600 mt-4">—— 李雅琳，滇草源创始人</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Development Timeline -->
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">发展历程</h2>
+                <p class="text-gray-600">从传统到现代，从理念到产品</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="timeline-item fade-in">
+                    <div class="bg-white rounded-lg p-6 card-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="serif-font text-xl font-bold text-gray-800">初心萌芽</h3>
+                            <span class="text-amber-600 font-medium">2015年</span>
+                        </div>
+                        <p class="text-gray-600">
+                            李雅琳女士开始深入研究云南草本植物的护发功效，走访全省各地，收集传统配方，建立草本数据库。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="bg-white rounded-lg p-6 card-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="serif-font text-xl font-bold text-gray-800">技术突破</h3>
+                            <span class="text-amber-600 font-medium">2017年</span>
+                        </div>
+                        <p class="text-gray-600">
+                            成功研发出独特的低温萃取技术，能够最大程度保留草本植物的活性成分，同时确保产品的温和性和有效性。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="bg-white rounded-lg p-6 card-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="serif-font text-xl font-bold text-gray-800">品牌诞生</h3>
+                            <span class="text-amber-600 font-medium">2019年</span>
+                        </div>
+                        <p class="text-gray-600">
+                            滇草源品牌正式成立，推出首款产品"特效去屑洗发水"，获得消费者广泛好评。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="bg-white rounded-lg p-6 card-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="serif-font text-xl font-bold text-gray-800">品质认证</h3>
+                            <span class="text-amber-600 font-medium">2021年</span>
+                        </div>
+                        <p class="text-gray-600">
+                            获得多项国际品质认证，包括有机认证、无动物测试认证等，产品远销海外市场。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="bg-white rounded-lg p-6 card-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="serif-font text-xl font-bold text-gray-800">持续创新</h3>
+                            <span class="text-amber-600 font-medium">2023年</span>
+                        </div>
+                        <p class="text-gray-600">
+                            建立现代化生产基地，引入智能化生产线，同时保持传统工艺的精髓，产品线不断丰富。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Ingredients Showcase -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">珍贵成分</h2>
+                <p class="text-gray-600">每一种成分都经过精心挑选，源自云南高原的纯净馈赠</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="ingredient-showcase" onclick="showIngredientDetail('tea')">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-2xl">🍃</span>
+                        </div>
+                        <div>
+                            <h3 class="serif-font text-xl font-bold mb-2">云南普洱茶</h3>
+                            <p class="text-gray-600 text-sm">抗氧化、滋养头皮，来自云南大叶种普洱茶的天然提取物</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ingredient-showcase" onclick="showIngredientDetail('rose')">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-2xl">🌹</span>
+                        </div>
+                        <div>
+                            <h3 class="serif-font text-xl font-bold mb-2">滇红玫瑰</h3>
+                            <p class="text-gray-600 text-sm">舒缓修复、改善发质，精选云南高原滇红玫瑰精油</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ingredient-showcase" onclick="showIngredientDetail('lavender')">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-2xl">💜</span>
+                        </div>
+                        <div>
+                            <h3 class="serif-font text-xl font-bold mb-2">高原薰衣草</h3>
+                            <p class="text-gray-600 text-sm">平衡油脂、放松身心，生长在云南高原的薰衣草精华</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ingredient-showcase" onclick="showIngredientDetail('heshouwu')">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-2xl">🌿</span>
+                        </div>
+                        <div>
+                            <h3 class="serif-font text-xl font-bold mb-2">野生何首乌</h3>
+                            <p class="text-gray-600 text-sm">强韧发根、促进生长，采自云南原始森林的珍贵草药</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 card-shadow" id="ingredient-detail" style="display: none;">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4" id="detail-icon">
+                        🍃
+                    </div>
+                    <h3 class="serif-font text-2xl font-bold text-gray-800 mb-4" id="detail-name">普洱茶提取物</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6" id="detail-desc">
+                        详细的成分介绍将在这里显示...
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-amber-50 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-800 mb-2">主要功效</h4>
+                            <p class="text-sm text-gray-600" id="detail-benefit">抗氧化、滋养头皮</p>
+                        </div>
+                        <div class="bg-amber-50 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-800 mb-2">产地来源</h4>
+                            <p class="text-sm text-gray-600" id="detail-origin">云南普洱</p>
+                        </div>
+                        <div class="bg-amber-50 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-800 mb-2">提取工艺</h4>
+                            <p class="text-sm text-gray-600" id="detail-process">低温萃取</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Production Process -->
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="container mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">制作工艺</h2>
+                <p class="text-gray-600">传统智慧与现代科技的完美结合</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="process-step card-shadow fade-in">
+                    <div class="process-icon">🌱</div>
+                    <h3 class="serif-font text-lg font-bold text-gray-800 mb-3">精选原料</h3>
+                    <p class="text-gray-600 text-sm">
+                        严格挑选云南高原优质草本植物，确保每一种原料都达到最高品质标准。
+                    </p>
+                </div>
+                
+                <div class="process-step card-shadow fade-in">
+                    <div class="process-icon">⚗️</div>
+                    <h3 class="serif-font text-lg font-bold text-gray-800 mb-3">低温萃取</h3>
+                    <p class="text-gray-600 text-sm">
+                        采用独特的低温萃取技术，最大程度保留草本植物的活性成分和天然香气。
+                    </p>
+                </div>
+                
+                <div class="process-step card-shadow fade-in">
+                    <div class="process-icon">🔬</div>
+                    <h3 class="serif-font text-lg font-bold text-gray-800 mb-3">科学配比</h3>
+                    <p class="text-gray-600 text-sm">
+                        结合现代皮肤科学，精确配比各种成分，确保产品的温和性和有效性。
+                    </p>
+                </div>
+                
+                <div class="process-step card-shadow fade-in">
+                    <div class="process-icon">🧪</div>
+                    <h3 class="serif-font text-lg font-bold text-gray-800 mb-3">品质检测</h3>
+                    <p class="text-gray-600 text-sm">
+                        每一批产品都经过严格的质量检测，确保安全性和稳定性达到最高标准。
+                    </p>
+                </div>
+                
+                <div class="process-step card-shadow fade-in">
+                    <div class="process-icon">🌿</div>
+                    <h3 class="serif-font text-lg font-bold text-gray-800 mb-3">天然添加</h3>
+                    <p class="text-gray-600 text-sm">
+                        只使用天然防腐剂和香料，绝不添加有害化学成分，呵护您的每一根秀发。
+                    </p>
+                </div>
+                
+                <div class="process-step card-shadow fade-in">
+                    <div class="process-icon">📦</div>
+                    <h3 class="serif-font text-lg font-bold text-gray-800 mb-3">精美包装</h3>
+                    <p class="text-gray-600 text-sm">
+                        采用环保材料精心包装，既保护环境，又体现品牌的高端品质。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Quality Promise -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">品质承诺</h2>
+                <p class="text-gray-600">我们对每一个产品都充满信心</p>
+            </div>
+            
+            <div class="story-card card-shadow fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">我们的承诺</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                100%天然植物成分，无有害化学添加
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                经过皮肤科测试，温和不刺激
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                无动物测试， Cruelty-Free认证
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                有机认证，可持续发展理念
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                30天无理由退换，品质保证
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">认证资质</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="certification-badge">有机认证</span>
+                            <span class="certification-badge">无动物测试</span>
+                            <span class="certification-badge">ISO9001</span>
+                            <span class="certification-badge">GMPC认证</span>
+                            <span class="certification-badge">环保包装</span>
+                            <span class="certification-badge">皮肤安全测试</span>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-green-50 rounded-lg">
+                            <h4 class="font-medium text-green-800 mb-2">联系客服</h4>
+                            <p class="text-sm text-green-700">
+                                如有任何疑问，请随时联系我们的客服团队，我们将竭诚为您服务。
+                            </p>
+                            <button class="mt-3 bg-green-600 text-white px-4 py-2 rounded-lg text-sm" onclick="window.location.href='contact.html'">
+                                联系我们
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Bottom Navigation -->
+    <nav class="nav-bottom">
+        <div class="flex justify-around">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>首页</span>
+            </a>
+            <a href="products.html" class="nav-item">
+                <span class="nav-icon">🛍️</span>
+                <span>产品</span>
+            </a>
+            <a href="about.html" class="nav-item active">
+                <span class="nav-icon">📖</span>
+                <span>关于</span>
+            </a>
+            <a href="contact.html" class="nav-item">
+                <span class="nav-icon">📞</span>
+                <span>联系</span>
+            </a>
+        </div>
+    </nav>
+    
+    <script>
+        // 成分数据
+        const ingredients = {
+            tea: {
+                icon: '🍃',
+                name: '云南普洱茶提取物',
+                desc: '来自云南大叶种普洱茶的天然提取物，富含茶多酚、儿茶素等多种活性成分。具有强大的抗氧化能力，能够有效中和自由基，保护头皮细胞免受氧化损伤。同时具有抗菌、消炎的作用，能够改善头皮环境，减少头屑产生。',
+                benefit: '抗氧化、滋养头皮、抗菌消炎',
+                origin: '云南普洱、西双版纳',
+                process: '低温超声波萃取'
+            },
+            rose: {
+                icon: '🌹',
+                name: '滇红玫瑰精油',
+                desc: '精选云南高原滇红玫瑰，通过传统蒸馏工艺提取的精油。含有丰富的芳香成分和维生素，具有卓越的修复和滋养功效。能够深层渗透发丝，修复受损的毛鳞片，改善发质干枯、毛躁等问题，让秀发重现光泽和弹性。',
+                benefit: '修复受损、滋养发丝、改善发质',
+                origin: '云南大理、丽江',
+                process: '传统水蒸气蒸馏'
+            },
+            lavender: {
+                icon: '💜',
+                name: '高原薰衣草精华',
+                desc: '生长在云南高原海拔2000米以上的薰衣草，含有丰富的芳樟醇和乙酸芳樟酯等活性成分。具有天然的平衡油脂分泌功能，能够调节头皮的水油平衡，有效控制头皮出油。同时具有舒缓神经、放松身心的芳香疗效。',
+                benefit: '平衡油脂、舒缓头皮、放松身心',
+                origin: '云南丽江、香格里拉',
+                process: '超临界CO2萃取'
+            },
+            heshouwu: {
+                icon: '🌿',
+                name: '野生何首乌提取物',
+                desc: '采自云南原始森林的野生何首乌，传统中草药瑰宝。含有丰富的卵磷脂、蒽醌类化合物等活性成分，能够促进头皮血液循环，为毛囊提供充足营养，强韧发根，减少脱发。同时具有乌发养发的传统功效。',
+                benefit: '强韧发根、促进生长、乌发养发',
+                origin: '云南西双版纳、普洱',
+                process: '传统煎煮+现代提纯'
+            }
+        };
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnimations();
+            initializeScrollAnimations();
+        });
+        
+        // 初始化动画
+        function initializeAnimations() {
+            anime.timeline({
+                easing: 'easeOutExpo',
+                duration: 1000
+            })
+            .add({
+                targets: '#hero-title',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                delay: 500
+            })
+            .add({
+                targets: '#hero-subtitle',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                delay: 200
+            }, '-=800')
+            .add({
+                targets: '#hero-image',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                scale: [0.9, 1],
+                delay: 0
+            }, '-=400');
+        }
+        
+        // 初始化滚动动画
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        // 显示成分详情
+        function showIngredientDetail(ingredientKey) {
+            const ingredient = ingredients[ingredientKey];
+            const detailDiv = document.getElementById('ingredient-detail');
+            
+            // 移除所有活跃状态
+            document.querySelectorAll('.ingredient-showcase').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // 添加活跃状态
+            event.currentTarget.classList.add('active');
+            
+            // 更新详情内容
+            document.getElementById('detail-icon').textContent = ingredient.icon;
+            document.getElementById('detail-name').textContent = ingredient.name;
+            document.getElementById('detail-desc').textContent = ingredient.desc;
+            document.getElementById('detail-benefit').textContent = ingredient.benefit;
+            document.getElementById('detail-origin').textContent = ingredient.origin;
+            document.getElementById('detail-process').textContent = ingredient.process;
+            
+            // 显示详情区域
+            detailDiv.style.display = 'block';
+            
+            // 滚动到详情区域
+            detailDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // 添加动画
+            anime({
+                targets: '#ingredient-detail',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 500,
+                easing: 'easeOutQuad'
+            });
+        }
+        
+        // 点击成分卡片外部关闭详情
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.ingredient-showcase') && !e.target.closest('#ingredient-detail')) {
+                document.querySelectorAll('.ingredient-showcase').forEach(el => {
+                    el.classList.remove('active');
+                });
+                document.getElementById('ingredient-detail').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

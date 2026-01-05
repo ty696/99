@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我们 - 滇草源</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-green: #2D5016;
+            --warm-beige: #F5F1E8;
+            --amber: #D4A574;
+            --ivory: #FFFEF7;
+            --dark-brown: #8B4513;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--ivory);
+            color: var(--dark-brown);
+            padding-bottom: 80px;
+        }
+        
+        .serif-font {
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--warm-beige) 0%, #E8E0D0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(45, 80, 22, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(45, 80, 22, 0.15);
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--deep-green), #3D6B1F);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--deep-green), #3D6B1F);
+            color: var(--ivory);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--amber);
+            color: var(--dark-brown);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--warm-beige);
+            border-radius: 12px;
+            background: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--deep-green);
+            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(45, 80, 22, 0.1);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: var(--warm-beige);
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 200px;
+        }
+        
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-icon.active {
+            transform: rotate(180deg);
+        }
+        
+        .nav-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 254, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(45, 80, 22, 0.1);
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: var(--dark-brown);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .nav-item.active {
+            color: var(--deep-green);
+        }
+        
+        .nav-item:hover {
+            color: var(--deep-green);
+            transform: translateY(-2px);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .map-container {
+            background: var(--warm-beige);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .service-time {
+            background: var(--amber);
+            color: var(--dark-brown);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-block;
+            margin: 0.25rem;
+        }
+        
+        .chat-bubble {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--deep-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .chat-bubble:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section py-16 px-4">
+        <div class="container mx-auto text-center">
+            <h1 class="serif-font text-4xl md:text-5xl font-bold text-gray-800 mb-6 opacity-0" id="hero-title">
+                联系我们
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto opacity-0" id="hero-subtitle">
+                我们随时准备为您提供帮助，解答您的疑问，倾听您的建议
+            </p>
+        </div>
+    </section>
+    
+    <!-- Contact Methods -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="contact-card text-center fade-in">
+                    <div class="contact-icon">📞</div>
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-2">客服热线</h3>
+                    <p class="text-gray-600 mb-3">专业客服团队为您服务</p>
+                    <a href="tel:400-888-9999" class="text-amber-600 font-medium text-lg">
+                        400-888-9999
+                    </a>
+                    <div class="mt-3">
+                        <span class="service-time">工作日 9:00-18:00</span>
+                        <span class="service-time">周末 10:00-16:00</span>
+                    </div>
+                </div>
+                
+                <div class="contact-card text-center fade-in">
+                    <div class="contact-icon">💬</div>
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-2">在线客服</h3>
+                    <p class="text-gray-600 mb-3">即时沟通，快速响应</p>
+                    <button class="btn-primary px-6 py-2 rounded-lg" onclick="startChat()">
+                        开始对话
+                    </button>
+                    <div class="mt-3">
+                        <span class="service-time">24小时在线</span>
+                    </div>
+                </div>
+                
+                <div class="contact-card text-center fade-in">
+                    <div class="contact-icon">📧</div>
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-2">邮件联系</h3>
+                    <p class="text-gray-600 mb-3">详细问题，专业回复</p>
+                    <a href="mailto:service@dianchaoyuan.com" class="text-amber-600 font-medium">
+                        service@dianchaoyuan.com
+                    </a>
+                    <div class="mt-3">
+                        <span class="service-time">24小时内回复</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Form -->
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="container mx-auto max-w-2xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">留言咨询</h2>
+                <p class="text-gray-600">请填写您的问题或建议，我们会尽快回复您</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-8 card-shadow fade-in">
+                <form id="contact-form">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">姓名 *</label>
+                            <input type="text" name="name" class="form-input" placeholder="请输入您的姓名" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">联系电话 *</label>
+                            <input type="tel" name="phone" class="form-input" placeholder="请输入您的电话" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">邮箱</label>
+                        <input type="email" name="email" class="form-input" placeholder="请输入您的邮箱（选填）">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">咨询类型 *</label>
+                        <select name="type" class="form-input" required>
+                            <option value="">请选择咨询类型</option>
+                            <option value="product">产品咨询</option>
+                            <option value="order">订单问题</option>
+                            <option value="aftersale">售后服务</option>
+                            <option value="cooperation">商务合作</option>
+                            <option value="other">其他问题</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">详细描述 *</label>
+                        <textarea name="message" class="form-input form-textarea" placeholder="请详细描述您的问题或建议" required></textarea>
+                    </div>
+                    
+                    <div class="flex items-center mb-6">
+                        <input type="checkbox" id="agree" name="agree" class="mr-3" required>
+                        <label for="agree" class="text-sm text-gray-600">
+                            我已阅读并同意 <a href="#" class="text-amber-600">隐私政策</a> 和 <a href="#" class="text-amber-600">服务条款</a>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="w-full btn-primary py-3 rounded-lg font-medium text-lg">
+                        提交留言
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-3xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">常见问题</h2>
+                <p class="text-gray-600">快速找到您关心的问题答案</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3 class="font-medium text-gray-800 flex-1">滇草源的产品适合所有发质吗？</h3>
+                        <span class="faq-icon text-gray-500">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            滇草源的产品经过精心配方，适合各种发质使用。我们有专门针对油性、干性、混合性头皮的产品系列。建议您使用我们的发质测试功能，找到最适合您的产品。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3 class="font-medium text-gray-800 flex-1">产品多久能看到效果？</h3>
+                        <span class="faq-icon text-gray-500">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            因人而异，一般情况下，使用1-2周就能感受到头皮清爽、头发柔顺的变化。对于头屑问题，通常需要2-4周的持续使用才能看到明显改善。建议坚持使用，效果会更显著。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3 class="font-medium text-gray-800 flex-1">孕妇可以使用滇草源的产品吗？</h3>
+                        <span class="faq-icon text-gray-500">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            滇草源的产品采用天然草本成分，不含有害化学物质，一般来说孕妇可以安全使用。但由于孕期体质特殊，建议在使用前咨询医生意见，或选择我们的无香型产品。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3 class="font-medium text-gray-800 flex-1">如何辨别正品？</h3>
+                        <span class="faq-icon text-gray-500">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            正品包装精美，有防伪二维码和唯一序列号。建议通过官方渠道购买，包括官网、授权电商平台和实体店。如有疑问，可以联系客服验证产品真伪。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3 class="font-medium text-gray-800 flex-1">退换货政策是怎样的？</h3>
+                        <span class="faq-icon text-gray-500">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            我们提供30天无理由退换货服务。如果您对产品不满意，可以联系客服申请退换货。产品需保持原包装完整，不影响二次销售。运费由顾客承担，特殊情况可协商处理。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3 class="font-medium text-gray-800 flex-1">配送时间和运费如何计算？</h3>
+                        <span class="faq-icon text-gray-500">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            一般情况下，订单确认后1-3个工作日内发货。国内主要城市2-5天送达，偏远地区可能需要更长时间。满199元免运费，不满199元收取12元运费。特殊时期可能会有调整。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Company Info -->
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="serif-font text-3xl font-bold text-gray-800 mb-4">公司信息</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="contact-card fade-in">
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">滇草源生物科技有限公司</h3>
+                    <div class="space-y-3 text-gray-600">
+                        <div class="flex items-start">
+                            <span class="text-amber-600 mr-3">📍</span>
+                            <div>
+                                <p>总部地址：云南省昆明市盘龙区世博路12号</p>
+                                <p class="text-sm">滇草源大厦15-18层</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-amber-600 mr-3">📞</span>
+                            <div>
+                                <p>总机：0871-8888-9999</p>
+                                <p class="text-sm">传真：0871-8888-9998</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-amber-600 mr-3">🌐</span>
+                            <div>
+                                <p>官网：www.dianchaoyuan.com</p>
+                                <p class="text-sm">邮箱：info@dianchaoyuan.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">营业时间</h3>
+                    <div class="space-y-3 text-gray-600">
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">客服中心</h4>
+                            <p>周一至周五：9:00 - 18:00</p>
+                            <p>周六至周日：10:00 - 16:00</p>
+                            <p class="text-sm text-amber-600">节假日照常服务</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">实体店铺</h4>
+                            <p>周一至周日：10:00 - 21:00</p>
+                            <p class="text-sm text-amber-600">全年无休</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="map-container mt-8 fade-in">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl">📍</span>
+                </div>
+                <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">门店位置</h3>
+                <p class="text-gray-600 mb-4">滇草源旗舰店 - 昆明市南屏街88号</p>
+                <p class="text-sm text-gray-500 mb-6">地铁2号线南屏街站A出口步行3分钟</p>
+                <button class="btn-primary px-6 py-2 rounded-lg" onclick="openMap()">
+                    查看地图导航
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Chat Bubble -->
+    <div class="chat-bubble" onclick="startChat()">
+        <span>💬</span>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <nav class="nav-bottom">
+        <div class="flex justify-around">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>首页</span>
+            </a>
+            <a href="products.html" class="nav-item">
+                <span class="nav-icon">🛍️</span>
+                <span>产品</span>
+            </a>
+            <a href="about.html" class="nav-item">
+                <span class="nav-icon">📖</span>
+                <span>关于</span>
+            </a>
+            <a href="contact.html" class="nav-item active">
+                <span class="nav-icon">📞</span>
+                <span>联系</span>
+            </a>
+        </div>
+    </nav>
+    
+    <script>
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnimations();
+            initializeScrollAnimations();
+        });
+        
+        // 初始化动画
+        function initializeAnimations() {
+            anime.timeline({
+                easing: 'easeOutExpo',
+                duration: 1000
+            })
+            .add({
+                targets: '#hero-title',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                delay: 500
+            })
+            .add({
+                targets: '#hero-subtitle',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                delay: 200
+            }, '-=800');
+        }
+        
+        // 初始化滚动动画
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        // FAQ功能
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-icon');
+            
+            // 关闭其他FAQ
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                if (item !== answer) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.faq-icon').forEach(item => {
+                if (item !== icon) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // 切换当前FAQ
+            answer.classList.toggle('active');
+            icon.classList.toggle('active');
+        }
+        
+        // 表单提交
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // 验证必填字段
+            if (!data.name || !data.phone || !data.type || !data.message || !data.agree) {
+                showNotification('请填写所有必填字段', 'error');
+                return;
+            }
+            
+            // 模拟提交
+            showNotification('正在提交...', 'info');
+            
+            setTimeout(() => {
+                showNotification('提交成功！我们会尽快回复您', 'success');
+                this.reset();
+            }, 2000);
+        });
+        
+        // 开始聊天
+        function startChat() {
+            showNotification('正在连接客服...', 'info');
+            
+            setTimeout(() => {
+                showNotification('客服已接入，请开始对话', 'success');
+            }, 1500);
+        }
+        
+        // 打开地图
+        function openMap() {
+            showNotification('正在打开地图应用...', 'info');
+            
+            // 这里可以添加实际的地图跳转逻辑
+            setTimeout(() => {
+                window.open('https://maps.google.com/?q=昆明市南屏街88号', '_blank');
+            }, 1000);
+        }
+        
+        // 通知功能
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500',
+                warning: 'bg-yellow-500'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            anime({
+                targets: notification,
+                translateY: [-50, 0],
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+            
+            setTimeout(() => {
+                anime({
+                    targets: notification,
+                    translateY: [0, -50],
+                    opacity: [1, 0],
+                    duration: 300,
+                    easing: 'easeInQuad',
+                    complete: () => {
+                        document.body.removeChild(notification);
+                    }
+                });
+            }, 3000);
+        }
+        
+        // 表单验证
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = '#F5F1E8';
+                }
+            });
+            
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#2D5016';
+            });
+        });
+        
+        // 电话号码格式化
+        document.querySelector('input[name="phone"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 11) {
+                value = value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+            } else if (value.length >= 7) {
+                value = value.replace(/(\d{3})(\d{4})/, '$1-$2');
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
