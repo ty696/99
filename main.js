@@ -49,7 +49,7 @@ const products = {
         image: 'product-line.png'
     },
     product3: {
-        name: '控油平衡洗发水',
+        name: '去屑控油平衡洗发水',
         price: 188,
         image: 'herbs-closeup.png'
     }
